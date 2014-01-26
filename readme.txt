@@ -41,7 +41,7 @@ Nothing here for now.
 = 1.0.1 =
 Bugfixes:
 
-* Added `IF NOT EXISTS` condition from table creation script
+* Added `IF NOT EXISTS` condition to table creation query
 * Fixed embarrassing typo.
 
 = 1.0 =
