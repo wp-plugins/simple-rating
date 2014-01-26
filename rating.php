@@ -30,7 +30,7 @@ function spr_filter($content)
                 $content .= spr_rating();
             }
         }
-        if (is_singular('page')&&($options['where_to_show']=='pages'||$options['where_to_show']=='both'))
+        else if (is_singular('page')&&($options['where_to_show']=='pages'||$options['where_to_show']=='both'))
         {
             if ($options['position']=='before')
             {
@@ -38,7 +38,7 @@ function spr_filter($content)
             }
             elseif ($options['position']=='after')
             {
-                $content .= spr_rating()."idk";
+                $content .= spr_rating();
             }
         }
     }
@@ -407,7 +407,7 @@ function spr_menu()
 function spr_activation_func()
 {
     global $wpdb;
-    $query="CREATE TABLE  `".$wpdb->prefix."spr_votes` (
+    $query="CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."spr_votes` (
 	`post_id` INT(11) NULL DEFAULT NULL,
 	`user_id` INT(11) NULL DEFAULT NULL,
 	`points` INT(11) NULL DEFAULT NULL
@@ -416,7 +416,7 @@ COLLATE='utf8_unicode_ci'
 ENGINE=MyISAM;
 ";
     $wpdb->query($query);
-    $query="CREATE TABLE  `".$wpdb->prefix."spr_rating` (
+    $query="CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."spr_rating` (
 	`post_id` INT(11) NOT NULL,
 	`votes` INT(11) NOT NULL,
 	`points` INT(11) NOT NULL

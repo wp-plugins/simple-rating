@@ -3,7 +3,7 @@ Contributors: FlyerUA
 Tags: rating, wordpress
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.0
+Stable tag: 1.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -37,5 +37,12 @@ Features:
 Nothing here for now.
 
 == Changelog ==
+
+= 1.0.1 =
+Bugfixes:
+
+* Added `IF NOT EXISTS` condition from table creation script
+* Fixed embarrassing typo.
+
 = 1.0 =
 Initial release
