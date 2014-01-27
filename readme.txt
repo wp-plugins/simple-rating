@@ -36,22 +36,27 @@ Features:
 
 == Frequently Asked Questions ==
 
-** How do I add rating to my posts/pages**
+**How do I add rating to my posts/pages**
+
 You can do it in two ways:
 - Automatically - set 'Insertion method' option to 'Automatic' (default). Plugin will use content filter to add rating based on your settings.
 - Manually - set 'Insertion method' option to 'Manual' and insert `<?php echo spr_show_rating();?>` where you need it in your template.
 
-** Can I reset votes? **
+**Can I reset votes?**
+
 Yes, you can by pressing "Reset votes" button on Simple Rating setting page. 
 Note: This only resets votes. Plugin will automatically fully remove its data upon deletion.
 
-** If I don't want to add rating for specific post or page, can I disable it for that specific post or page?
+**If I don't want to add rating for specific post or page, can I disable it for that specific post or page?**
+
 You certainly can. Just tick the box "Disable rating" when editing post or page in question.
 
 ** Can I leave Vote count color empty? **
+
 Yes, you can. In that case, color will be inherited.
 
-** Will you add support for custom post types? **
+**Will you add support for custom post types?**
+
 Yes, that's already planned.
 
 == Changelog ==
