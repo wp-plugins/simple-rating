@@ -518,7 +518,7 @@ function add_spr_checkbox()
         ?>
         <div class="misc-pub-section">
             <input id="spr_disable_rating" type="checkbox" name="spr_disable_rating"  value="<?php echo $disable_rating; ?>" <?php checked($disable_rating, 1, true); ?>>
-            <label for="spr_enable_rating">Disable rating</label></div>
+            <label for="spr_enable_rating">Disable rating for this <?php if ($type=='page') { ?>page<?php } else if($type=='post'){ ?>post<?php } ?></label></div>
         <?php
     }
 }

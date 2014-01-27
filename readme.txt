@@ -13,8 +13,7 @@ Allows users to rate your content.
 
 Simple rating plugin with few features.
 
-Features:
-
+= Features: =
 * 4 shapes which come in 5 colors to fit wide variety of themes
 * Adjust scale of rating
 * Turn on/off display of amount of votes
@@ -27,6 +26,7 @@ Features:
 == Screenshots ==
 
 1. Simple Rating settings
+2. Disable rating for specific post
 
 == Installation ==
 
