@@ -39,8 +39,9 @@ Features:
 **How do I add rating to my posts/pages**
 
 You can do it in two ways:
-- Automatically - set 'Insertion method' option to 'Automatic' (default). Plugin will use content filter to add rating based on your settings.
-- Manually - set 'Insertion method' option to 'Manual' and insert `<?php echo spr_show_rating();?>` where you need it in your template.
+
+* Automatically - set 'Insertion method' option to 'Automatic' (default). Plugin will use content filter to add rating based on your settings.
+* Manually - set 'Insertion method' option to 'Manual' and insert `<?php echo spr_show_rating();?>` where you need it in your template.
 
 **Can I reset votes?**
 
