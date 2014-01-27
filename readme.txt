@@ -52,7 +52,7 @@ Note: This only resets votes. Plugin will automatically fully remove its data up
 
 You certainly can. Just tick the box "Disable rating" when editing post or page in question.
 
-**Can I leave Vote count color empty?**
+**Can I leave 'Vote count color' empty?**
 
 Yes, you can. In that case, color will be inherited.
 
