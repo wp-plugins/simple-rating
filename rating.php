@@ -1,15 +1,14 @@
 <?php
-
 /*
 
   Plugin Name: Simple Rating
   Description: Allows users to rate posts and pages.
-  Version: 1.0.1
+  Version: 1.1
   Author: Igor Yavych
   Author URI: https://www.odesk.com/users/~~d196de64099a8aa3
  */
 $options=spr_options();
-if ($options['activated']==1)
+if ($options['activated']==1&&$options['method']=="auto")
 {
     add_filter('the_content', 'spr_filter', 15);
 }
@@ -17,32 +16,52 @@ if ($options['activated']==1)
 function spr_filter($content)
 {
     $options=spr_options();
-    if (is_singular())
+    global $post;
+    $disable_rating=get_post_meta($post->ID, '_spr_disable', true);
+
+    if (is_singular('post')&&($options['where_to_show']=='posts'||$options['where_to_show']=='both')&&$disable_rating!='1')
     {
-        if (is_singular('post')&&($options['where_to_show']=='posts'||$options['where_to_show']=='both'))
+        if ($options['position']=='before')
         {
-            if ($options['position']=='before')
-            {
-                $content=spr_rating().$content;
-            }
-            elseif ($options['position']=='after')
-            {
-                $content .= spr_rating();
-            }
+            $content=spr_rating().$content;
         }
-        else if (is_singular('page')&&($options['where_to_show']=='pages'||$options['where_to_show']=='both'))
+        elseif ($options['position']=='after')
         {
-            if ($options['position']=='before')
-            {
-                $content=spr_rating().$content;
-            }
-            elseif ($options['position']=='after')
-            {
-                $content .= spr_rating();
-            }
+            $content .= spr_rating();
         }
     }
+    else if (is_singular('page')&&($options['where_to_show']=='pages'||$options['where_to_show']=='both')&&$disable_rating!='1')
+    {
+        if ($options['position']=='before')
+        {
+            $content=spr_rating().$content;
+        }
+        elseif ($options['position']=='after')
+        {
+            $content .= spr_rating();
+        }
+    }
+
     return $content;
+}
+
+function spr_show_rating()
+{
+    $options=spr_options();
+    global $post;
+    $disable_rating=get_post_meta($post->ID, '_spr_disable', true);
+    if ($options['method']=="manual")
+    {
+        if (is_singular('post')&&($options['where_to_show']=='posts'||$options['where_to_show']=='both')&&$disable_rating!='1')
+        {
+            $result=spr_rating();
+        }
+        else if (is_singular('page')&&($options['where_to_show']=='pages'||$options['where_to_show']=='both')&&$disable_rating!='1')
+        {
+            $result=spr_rating();
+        }
+    }
+    return $result;
 }
 
 function spr_rating()
@@ -55,6 +74,7 @@ function spr_rating()
     wp_enqueue_script('spr_script', plugins_url('/resources/spr_script.js', __FILE__), array('jquery'), NULL);
     wp_enqueue_style('spr_style', plugins_url('/resources/spr_style.css', __FILE__));
     $options=spr_options();
+    spr_print_additional_styles();
     if (is_user_logged_in()==1)
     {
         $query="select * from `".$wpdb->prefix."spr_votes` where `post_id`='$post->ID' and `user_id`='$current_user->ID';";
@@ -121,7 +141,7 @@ function spr_show_voted($votes, $points)
         {
             $votesorvote='votes';
         }
-        $html .= '<span class="spr_votes">'.$votes.' '.$votesorvote.'</span>';
+        $html .= '<span id="spr_votes">'.$votes.' '.$votesorvote.'</span>';
     }
     return $html;
 }
@@ -167,7 +187,7 @@ function spr_show_voting($votes, $points)
         {
             $votesorvote='votes';
         }
-        $html .= '<span class="spr_votes">'.$votes.' '.$votesorvote.'</span>';
+        $html .= '<span id="spr_votes">'.$votes.' '.$votesorvote.'</span>';
     }
     return $html;
 }
@@ -247,8 +267,14 @@ function spr_rate()
 
 function spr_options()
 {
+    $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>"both", "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0");
     $options=get_option('spr_settings');
     $options=json_decode($options, true);
+    $diff=array_diff_key($default_options, $options);
+    if (count($diff)>0)
+    {
+        $options=array_merge($options, $diff);
+    }
     return $options;
 }
 
@@ -260,7 +286,7 @@ function spr_options_page()
 function spr_save_settings()
 {
     $current_options=spr_options();
-    if (isset($_POST['spr_shape'])||isset($_POST['spr_color'])||isset($_POST['spr_where_to_show'])||isset($_POST['spr_position'])||isset($_POST['spr_scale'])||isset($_POST['spr_show_vote_count'])||isset($_POST['spr_activated']))
+    if (isset($_POST['spr_shape'])||isset($_POST['spr_color'])||isset($_POST['spr_where_to_show'])||isset($_POST['spr_position'])||isset($_POST['spr_scale'])||isset($_POST['spr_show_vote_count'])||isset($_POST['spr_activated'])||isset($_POST['spr_method'])||isset($_POST['spr_vote_count_color'])||isset($_POST['spr_vc_bold'])||isset($_POST['spr_vc_italic']))
     {
         //Shape
         if (isset($_POST['spr_shape']))
@@ -392,8 +418,62 @@ function spr_save_settings()
                 $options['scale']=$current_options['scale'];
             }
         }
+        //Method
+        if (isset($_POST['spr_method']))
+        {
+            switch ($_POST['spr_method'])
+            {
+                case 'auto' : {
+                        $options['method']='auto';
+                        break;
+                    }
+                case 'manual' : {
+                        $options['method']='manual';
+                        break;
+                    }
+                default: {
+                        $options['method']=$current_options['method'];
+                        break;
+                    }
+            }
+        }
+        // Vote count color
+        if (isset($_POST['spr_vote_count_color']))
+        {
+            if (preg_match('@^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$@', $_POST['spr_vote_count_color']))
+            {
+                $options['vote_count_color']=$_POST['spr_vote_count_color'];
+            }
+            else
+            {
+                $_POST['spr_vote_count_color']="";
+            }
+        }
+        //Bold
+        if (isset($_POST['spr_vc_bold']))
+        {
+            $options['vc_bold']='1';
+        }
+        else
+        {
+            $options['vc_bold']='0';
+        }
+        //Italic
+        if (isset($_POST['spr_vc_italic']))
+        {
+            $options['vc_italic']='1';
+        }
+        else
+        {
+            $options['vc_italic']='0';
+        }
 
-
+        $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>"both", "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0");
+        $diff=array_diff_key($default_options, $options);
+        if (count($diff)>0)
+        {
+            $options=array_merge($options, $diff);
+        }
         $options=json_encode($options);
         update_option('spr_settings', $options);
     }
@@ -407,10 +487,10 @@ function spr_menu()
 function spr_activation_func()
 {
     global $wpdb;
-    $query="CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."spr_votes` (
+    $query="CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."spr_votes`  (
 	`post_id` INT(11) NULL DEFAULT NULL,
 	`user_id` INT(11) NULL DEFAULT NULL,
-	`points` INT(11) NULL DEFAULT NULL
+	`points` INT(11) NULL DEFAULT NULL 
 )
 COLLATE='utf8_unicode_ci'
 ENGINE=MyISAM;
@@ -425,9 +505,89 @@ COLLATE='utf8_unicode_ci'
 ENGINE=MyISAM;
 ";
     $wpdb->query($query);
-    add_option('spr_settings', '{"shape":"y","color":"s","where_to_show":"both","position":"before","show_vote_count":"1","activated":"0","scale":"5"}');
+    add_option('spr_settings', '{"shape":"s","color":"y","where_to_show":"both","position":"before","show_vote_count":"1","activated":"0","scale":"5","method":"auto","alignment":"center","vote_count_color":"","vc_bold":"0","vc_italic":"0"}');
 }
 
+function add_spr_checkbox()
+{
+    global $post;
+    $type=get_post_type($post->ID);
+    if ($type=='page'||$type=='post')
+    {
+        $disable_rating=get_post_meta($post->ID, '_spr_disable', true);
+        ?>
+        <div class="misc-pub-section">
+            <input id="spr_disable_rating" type="checkbox" name="spr_disable_rating"  value="<?php echo $disable_rating; ?>" <?php checked($disable_rating, 1, true); ?>>
+            <label for="spr_enable_rating">Disable rating</label></div>
+        <?php
+    }
+}
+
+function spr_new_update_post_handler($data, $postarr)
+{
+
+    if (isset($_POST['spr_disable_rating']))
+    {
+        update_post_meta($postarr['ID'], '_spr_disable', '1');
+    }
+    else
+    {
+        delete_post_meta($postarr['ID'], '_spr_disable');
+    }
+    return $data;
+}
+
+function spr_truncate_tables()
+{
+    global $wpdb;
+    $query="TRUNCATE TABLE `".$wpdb->prefix."spr_votes` ;";
+    $wpdb->query($query);
+    $query="TRUNCATE TABLE `".$wpdb->prefix."spr_rating`;";
+    $wpdb->query($query);
+}
+
+function spr_add_settings_link($links)
+{
+
+    return array_merge(
+            array(
+        'settings'=>'<a href="'.admin_url('options-general.php?page=spr_options').'">Settings</a>'
+            ), $links
+    );
+}
+
+function spr_print_additional_styles()
+{
+    $options=spr_options();
+    $style="<style>";
+    $vc_style="#spr_votes{";
+    if (strlen($options['vote_count_color'])>0&&$options['show_vote_count'])
+    {
+        $vc_style.="color:".$options['vote_count_color']." !important;";
+    }
+    if ($options['vc_bold']&&$options['show_vote_count'])
+    {
+        $vc_style.="font-weight:700 !important;";
+    }
+    if ($options['vc_italic']&&$options['show_vote_count'])
+    {
+        $vc_style.="font-style:italic !important;";
+    }
+    $vc_style.="}";
+    if ($vc_style!="#spr_votes{}")
+    {
+        $style.=$vc_style;
+    }
+    $style.="</style>";
+    if ($style!="<style></style>")
+    {
+        echo $style;
+    }
+}
+
+add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'spr_add_settings_link');
+add_filter('wp_insert_post_data', 'spr_new_update_post_handler', '99', 2);
+add_action('post_submitbox_misc_actions', 'add_spr_checkbox');
 add_action('admin_menu', 'spr_menu');
 add_action('wp_ajax_spr_rate', 'spr_rate');
 register_activation_hook(__FILE__, 'spr_activation_func');

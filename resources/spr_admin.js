@@ -58,6 +58,19 @@ $j("#spr_color").change(function(event)
         $j("#spr_piece_" + i).addClass('spr_' + type + '_full_voting');
     }
 })
+$j("#spr_alignment").change(function(event)
+{
+    $j("#spr_container").css('text-align', $j("#spr_alignment option:selected").val());
+})
+$j("#spr_method").change(function(event)
+{
+    if ($j("#spr_method").val() == 'manual') {
+        $j("#spr_method_hint").show();
+    }
+    else {
+        $j("#spr_method_hint").hide();
+    }
+})
 
 $j("#spr_scale").on('input', function(event)
 {
@@ -78,12 +91,74 @@ $j("#spr_scale").on('input', function(event)
         }
     }
 })
+$j("#spr_vote_count_color").on('input', function(event)
+{
+    if ($j("#spr_vote_count_color").val() == '' || !$j("#spr_vote_count_color").val().match(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/g)) {
+        $j("#spr_votes").css('color', '');
+        $j('.pickcolor').css('background', '');
+    }
+    else {
+        $j("#spr_votes").css('color', $j("#spr_vote_count_color").val());
+        $j('#spr_vote_count_color_box').css('background', $j("#spr_vote_count_color").val());
+    }
+})
 
 $j("#spr_show_vote_count").change(function(event)
 {
     if ($j(this).is(":checked")) {
-        $j(".spr_votes").html('5 votes');
+        $j("#spr_votes").html('5 votes');
     }
     else
-        $j(".spr_votes").html('');
+        $j("#spr_votes").html('');
 })
+
+$j("#spr_vc_italic").change(function(event)
+{
+    if ($j(this).is(":checked")) {
+        $j("#spr_votes").css('font-style', 'italic');
+    }
+    else
+        $j("#spr_votes").css('font-style', '');
+})
+
+$j("#spr_vc_bold").change(function(event)
+{
+    if ($j(this).is(":checked")) {
+        $j("#spr_votes").css('font-weight', '700');
+    }
+    else
+        $j("#spr_votes").css('font-weight', '');
+})
+
+jQuery(document).ready(function($) {
+    $j("#spr_votes").css('color', $j('#spr_vote_count_color').val());
+    if ($j('#spr_vc_italic').is(":checked")) {
+        $j("#spr_votes").css('font-style', 'italic');
+    }
+    else
+        $j("#spr_votes").css('font-style', '');
+    if ($j('#spr_vc_bold').is(":checked")) {
+        $j("#spr_votes").css('font-weight', '700');
+    }
+    else
+        $j("#spr_votes").css('font-weight', '');
+
+    $('.pickcolor').click(function(e) {
+        colorPicker = $(this).next('div');
+        input = $(this).prev('input');
+        clicked = $(this);
+
+        $.farbtastic($(colorPicker), function(a) {
+            $(input).val(a);
+            $(clicked).css('background', a);
+            $j("#spr_votes").css('color', a);
+        });
+
+        colorPicker.show();
+        e.preventDefault();
+
+        $(document).mousedown(function() {
+            $(colorPicker).hide();
+        });
+    });
+});

@@ -1,9 +1,10 @@
 .spr_widget_title{padding:2px 7px;}
 .spr_button{margin-top:5px !important;}
 .spr_rating_piece{display:block;float:left;width:17px;height:17px;background-repeat:no-repeat;} 
-.spr_votes{padding-left:.5em;font-size: 15px;line-height:17px;} 
+#spr_votes{padding-left:.5em;font-size: 15px;line-height:17px;} 
 #spr_container{text-align:center;line-height:17px;margin:5px 0;} 
 #spr_visual_container{height:17px;line-height:17px;display:inline-block;margin:0;padding:0;}
+#spr_method_hint {display:none;margin-left: 5px;}
 /*--- Stars ---*/
 /*Blue*/
 .spr_bs_empty{background:url(blue_stars.png) -17px 0;background-repeat:no-repeat;} 
