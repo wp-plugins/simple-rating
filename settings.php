@@ -105,6 +105,10 @@ wp_localize_script('spr_admin', 'spr_ajax_object', array('scale'=>$options['scal
                 </td>
             </tr> 
             <tr>
+                <td  width="150px"><label>Show in loops</label></td>
+                <td><input type="checkbox" name="spr_show_in_loops" id="spr_show_in_loops" value="<?php echo $options['show_in_loops']; ?>" <?php checked($options['show_in_loops'], 1, true); ?>></td>
+            </tr>
+            <tr>
                 <td  width="150px"><label>Position</label></td>
                 <td>
                     <select name="spr_position" id="spr_position">
