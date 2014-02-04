@@ -3,7 +3,7 @@
 
   Plugin Name: Simple Rating
   Description: Allows users to rate posts and pages.
-  Version: 1.1.1
+  Version: 1.1.2
   Author: Igor Yavych
   Author URI: https://www.odesk.com/users/~~d196de64099a8aa3
  */
@@ -84,15 +84,7 @@ function spr_show_rating()
             $popularity=$wpdb->get_results($query, ARRAY_N);
             $votes=$popularity[0][0];
             $points=$popularity[0][1];
-            $results='<div id="spr_container"><div id="spr_visual_container">'.spr_show_voted($votes, $points).'</div></div>';
-            if ($options['position']=='before')
-            {
-                $content=$results.$content;
-            }
-            elseif ($options['position']=='after')
-            {
-                $content .= $results;
-            }
+            $result='<div id="spr_container"><div id="spr_visual_container">'.spr_show_voted($votes, $points).'</div></div>';
         }
     }
     return $result;
