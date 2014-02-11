@@ -24,7 +24,7 @@ class SPR_Top_Widget extends WP_Widget
         }
         $intypes=implode(',', $intypes);
         $count=$instance['count'];
-        $query="select `id`, `post_title` from `".$wpdb->prefix."posts` inner join `".$wpdb->prefix."spr_rating` on (`".$wpdb->prefix."posts`.`ID` =  `".$wpdb->prefix."spr_rating`.`post_id`) where `post_type` in ($intypes) limit $count;";
+        $query="select `id`, `post_title` from `".$wpdb->prefix."posts` inner join `".$wpdb->prefix."spr_rating` on (`".$wpdb->prefix."posts`.`ID` =  `".$wpdb->prefix."spr_rating`.`post_id`) where `post_type` in ($intypes) order by `".$wpdb->prefix."spr_rating`.`points` DESC, `".$wpdb->prefix."posts`.`post_title` ASC limit $count;";
         $popularity=$wpdb->get_results($query, ARRAY_A);
         if (count($popularity)<1)
         {
