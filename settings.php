@@ -26,7 +26,7 @@ wp_localize_script('spr_admin', 'spr_ajax_object', array('scale'=>$options['scal
             <tr>
                 <td  width="150px"><label>Insertion method</label></td>
                 <td>
-                    <select name="spr_method" id="spr_method">
+                    <select name="spr_method" id="spr_method" class="spr_admin_input">
                         <option value="auto" <?php selected($options['method'], 'auto', true); ?>>Automatic</option>
                         <option value="manual" <?php selected($options['method'], 'manual', true); ?>>Manual</option>
                     </select>
@@ -42,7 +42,7 @@ wp_localize_script('spr_admin', 'spr_ajax_object', array('scale'=>$options['scal
             <tr>
                 <td  width="150px"><label>Shape</label></td>
                 <td>
-                    <select name="spr_shape" id="spr_shape">
+                    <select name="spr_shape" id="spr_shape" class="spr_admin_input">
                         <option value="s" <?php selected($options['type'], 's', true); ?>>Stars</option>
                         <option value="c" <?php selected($options['type'], 'c', true); ?>>Circles</option>
                         <option value="h" <?php selected($options['type'], 'h', true); ?>>Hearts</option>
@@ -53,7 +53,7 @@ wp_localize_script('spr_admin', 'spr_ajax_object', array('scale'=>$options['scal
             <tr>
                 <td  width="150px"><label>Alignment</label></td>
                 <td>
-                    <select name="spr_alignment" id="spr_alignment">
+                    <select name="spr_alignment" id="spr_alignment" class="spr_admin_input">
                         <option value="center" <?php selected($options['alignment'], 'center', true); ?>>Center</option>
                         <option value="right" <?php selected($options['alignment'], 'right', true); ?>>Right</option>
                         <option value="left" <?php selected($options['alignment'], 'left', true); ?>>Left</option>
@@ -63,7 +63,7 @@ wp_localize_script('spr_admin', 'spr_ajax_object', array('scale'=>$options['scal
             <tr>
                 <td  width="150px"><label>Color</label></td>
                 <td>
-                    <select name="spr_color" id="spr_color">
+                    <select name="spr_color" id="spr_color" class="spr_admin_input">
                         <option value="y" <?php selected($options['color'], 'y', true); ?>>Yellow</option>
                         <option value="p" <?php selected($options['color'], 'p', true); ?>>Purple</option>
                         <option value="g" <?php selected($options['color'], 'g', true); ?>>Green</option>
@@ -79,7 +79,7 @@ wp_localize_script('spr_admin', 'spr_ajax_object', array('scale'=>$options['scal
             <tr>
                 <td  width="150px"><label>Vote count color</label></td>
                 <td>
-                    <input type="text" size="10" maxlength="8" name="spr_vote_count_color" id="spr_vote_count_color" value="<?php echo $options['vote_count_color']; ?>">
+                    <input type="text" size="10" maxlength="8" name="spr_vote_count_color" id="spr_vote_count_color" value="<?php echo $options['vote_count_color']; ?>" class="spr_admin_input">
                     <a href="#" id="spr_vote_count_color_box" class="pickcolor" style="padding: 4px 11px; border: 1px solid #dfdfdf; margin: 0 7px 0 3px; background-color: <?php echo $options['vote_count_color']; ?>;"></a>
                     <div id="psr_color_picker" style="z-index: 100; background:#eee; border:1px solid #ccc; position:absolute; display:none;"></div>
                 </td>
@@ -92,16 +92,12 @@ wp_localize_script('spr_admin', 'spr_ajax_object', array('scale'=>$options['scal
                 </td>
             </tr>
             <td  width="150px"><label>Scale</label></td>
-            <td><input type="text" size="10" maxlength="200" name="spr_scale" id="spr_scale" value="<?php echo $options['scale']; ?>"></td>
+            <td><input type="text" size="10" maxlength="200" name="spr_scale" id="spr_scale" value="<?php echo $options['scale']; ?>" class="spr_admin_input"></td>
             </tr>
             <tr>
                 <td  width="150px"><label>Where to add rating</label></td>
                 <td>
-                    <select name="spr_where_to_show" id="spr_where_to_show">
-                        <option value="posts" <?php selected($options['where_to_show'], 'posts', true); ?>>Posts only</option>
-                        <option value="pages" <?php selected($options['where_to_show'], 'pages', true); ?>>Pages only</option>
-                        <option value="both" <?php selected($options['where_to_show'], 'both', true); ?>>Both</option>
-                    </select>
+                    <?php echo spr_get_post_types_fo();?>
                 </td>
             </tr> 
             <tr>
@@ -111,7 +107,7 @@ wp_localize_script('spr_admin', 'spr_ajax_object', array('scale'=>$options['scal
             <tr>
                 <td  width="150px"><label>Position</label></td>
                 <td>
-                    <select name="spr_position" id="spr_position">
+                    <select name="spr_position" id="spr_position" class="spr_admin_input">
                         <option value="before" <?php selected($options['position'], 'before', true); ?>>Before content</option>
                         <option value="after" <?php selected($options['position'], 'after', true); ?>>After content</option>
                     </select>

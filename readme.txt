@@ -3,7 +3,7 @@ Contributors: FlyerUA
 Tags: rating, wordpress
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.1.2
+Stable tag: 1.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -18,15 +18,18 @@ Simple rating plugin with few features.
 * Adjust scale of rating
 * Turn on/off display of amount of votes
 * Display before or after content
-* Display for post, pages or both 
-* Disable rating for specific post or page 
+* Select for what types of content rating will be displayed
+* Disable rating for specific entry
 * Choose alignment of the rating
 * Customize vote count style
+* Widget that lists your top rated content 
+* Works with custom posts types
 
 == Screenshots ==
 
 1. Simple Rating settings
 2. Disable rating for specific post
+3. Simple Rating Top Rated Content widget
 
 == Installation ==
 
@@ -56,14 +59,21 @@ You certainly can. Just tick the box "Disable rating" when editing post or page 
 
 Yes, you can. In that case, color will be inherited.
 
-**Will you add support for custom post types?**
+**Are custom post types supported?**
 
-Yes, that's already planned.
+Yes, they are. 
 
 == Changelog ==
 
+= 1.2 =
+* Added widget that lists your top rated content
+* As promised, Simple Rating now works with custom post types (Please, go to settings and re-select where to show rating)
+* Added mechanism to ensure that rating will be added only once when using manual insertion method
+* Rating won't show on archive pages (category, tag, custom post type archive, etc) if rating is disabled for that post type
+* Minified CSS and JS to save 1,34 Kb. Imagine all saved bandwidth ;)
+
 = 1.1.2 =
-* Fixed bug with "Show in loops" functionality which could be experienced when using manual insertion method.
+* Fixed bug with "Show in loops" functionality which could be experienced when using manual insertion method
 
 = 1.1.1 =
 * Added ability to show rating in loops (category pages for example) (requested by user alkahf)
