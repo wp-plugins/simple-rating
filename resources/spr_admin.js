@@ -120,6 +120,21 @@ $j("#spr_vc_italic").change(function(event)
     else
         $j("#spr_votes").css('font-style', '');
 })
+$j("#spr_show_in_loops").change(function(event)
+{
+    if (!$j(this).is(":checked")) {
+        $j("#spr_loop_on_hp").removeAttr("checked");
+    }
+
+
+})
+$j("#spr_loop_on_hp").change(function(event)
+{
+    if ($j(this).is(":checked")) {
+        $j("#spr_show_in_loops").attr("checked", "checked");
+    }
+
+})
 
 $j("#spr_vc_bold").change(function(event)
 {

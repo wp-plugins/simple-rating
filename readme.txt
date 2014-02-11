@@ -3,7 +3,7 @@ Contributors: FlyerUA
 Tags: rating, wordpress
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -64,6 +64,10 @@ Yes, you can. In that case, color will be inherited.
 Yes, they are. 
 
 == Changelog ==
+
+= 1.2.1=
+* Ability to shop in the loop on home page
+* Fixed bug with displaying in archives which could be experienced when using manual insertion
 
 = 1.2 =
 * Added widget that lists your top rated content

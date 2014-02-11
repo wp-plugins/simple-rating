@@ -3,7 +3,7 @@
 
   Plugin Name: Simple Rating
   Description: Allows users to rate posts and pages.
-  Version: 1.2
+  Version: 1.2.1
   Author: Igor Yavych
   Author URI: https://www.odesk.com/users/~~d196de64099a8aa3
  */
@@ -36,9 +36,9 @@ function spr_filter($content)
             }
             break;
         }
-        else if (is_archive()&&$disable_rating!='1'&&$options['show_in_loops']==1)
+        else if ((is_archive()||(is_home()&&$options['loop_on_hp']==1&&in_the_loop()))&&$options['show_in_loops']==1)
         {
-            if ($post->post_type==$list_&$options['where_to_show'][$list_])
+            if ($post->post_type==$list_&$options['where_to_show'][$list_]&&$disable_rating!='1')
             {
                 wp_enqueue_style('spr_style', plugins_url('/resources/spr_style.css', __FILE__));
                 $query="select `votes`, `points` from `".$wpdb->prefix."spr_rating` where `post_id`='$post->ID';";
@@ -65,22 +65,22 @@ function spr_show_rating()
 {
     $options=spr_options();
     $list=spr_list_cpt_slugs();
-    global $post, $wpdb, $spr_added;
+    global $post, $wpdb, $spr_added,$spr_added_loop;
     $disable_rating=get_post_meta($post->ID, '_spr_disable', true);
     $result="";
-    if ($options['method']=="manual"&&$options['activated']==1&&$spr_added!=1)
+    if ($options['method']=="manual"&&$options['activated']==1)
     {
         foreach ($list as $list_)
         {
-            if (is_singular($list_)&&$options['where_to_show'][$list_]&&$disable_rating!='1')
+            if (is_singular($list_)&&$options['where_to_show'][$list_]&&$disable_rating!='1'&&$spr_added!=1)
             {
                 $result=spr_rating();
                 $spr_added=1;
                 break;
             }
-            if (is_archive()&&$disable_rating!='1'&&$options['show_in_loops']==1)
+            if ((is_archive()||($options['loop_on_hp']==1&&is_home()&&in_the_loop()))&&$options['show_in_loops']==1)
             {
-                if ($post->post_type==$list_&$options['where_to_show'][$list_])
+                if ($post->post_type==$list_&$options['where_to_show'][$list_]&&$disable_rating!='1'&&$spr_added_loop[$post->ID]!=1)
                 {
                     wp_enqueue_style('spr_style', plugins_url('/resources/spr_style.css', __FILE__));
                     $query="select `votes`, `points` from `".$wpdb->prefix."spr_rating` where `post_id`='$post->ID';";
@@ -88,7 +88,7 @@ function spr_show_rating()
                     $votes=$popularity[0][0];
                     $points=$popularity[0][1];
                     $result='<div id="spr_container"><div id="spr_visual_container">'.spr_show_voted($votes, $points).'</div></div>';
-                    $spr_added=1;
+                    $spr_added_loop[$post->ID]=1;
                     break;
                 }
             }
@@ -312,7 +312,7 @@ function spr_options()
     {
         $def_types[$list_]=0;
     }
-    $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0");
+    $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0","loop_on_hp"=>"0");
     $options=get_option('spr_settings');
     $options=json_decode($options, true);
     $diff=array_diff_key($default_options, $options);
@@ -331,7 +331,7 @@ function spr_options_page()
 function spr_save_settings()
 {
     $current_options=spr_options();
-    if (isset($_POST['spr_shape'])||isset($_POST['spr_color'])||isset($_POST['spr_position'])||isset($_POST['spr_scale'])||isset($_POST['spr_show_vote_count'])||isset($_POST['spr_activated'])||isset($_POST['spr_method'])||isset($_POST['spr_vote_count_color'])||isset($_POST['spr_vc_bold'])||isset($_POST['spr_vc_italic'])||isset($_POST['spr_show_in_loops']))
+    if (isset($_POST['spr_shape'])||isset($_POST['spr_color'])||isset($_POST['spr_position'])||isset($_POST['spr_scale'])||isset($_POST['spr_show_vote_count'])||isset($_POST['spr_activated'])||isset($_POST['spr_method'])||isset($_POST['spr_vote_count_color'])||isset($_POST['spr_vc_bold'])||isset($_POST['spr_vc_italic'])||isset($_POST['spr_show_in_loops'])||isset($_POST['spr_loop_on_hp']))
     {
 
 //Shape
@@ -499,6 +499,15 @@ function spr_save_settings()
         {
             $options['show_in_loops']='0';
         }
+        //Loop on homepage
+        if (isset($_POST['spr_loop_on_hp']))
+        {
+            $options['loop_on_hp']='1';
+        }
+        else
+        {
+            $options['loop_on_hp']='0';
+        }
         //where to show
         $list=spr_list_cpt_slugs();
         foreach ($list as $list_)
@@ -513,7 +522,7 @@ function spr_save_settings()
                 $options['where_to_show'][$list_]='0';
             }
         }
-        $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0");
+        $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0","loop_on_hp"=>"0");
         $diff=array_diff_key($default_options, $options);
         if (count($diff)>0)
         {
@@ -555,9 +564,9 @@ ENGINE=MyISAM;
     {
         $def_types[$list_]=0;
     }
-    $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0");
+    $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0","loop_on_hp"=>"0");
     add_option('spr_settings', json_encode($default_options));
-    add_option('spr_version', '1.2');
+    add_option('spr_version', '1.2.1');
 }
 
 function add_spr_checkbox()

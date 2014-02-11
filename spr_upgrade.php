@@ -3,27 +3,31 @@
 function upgrade()
 {
     $version=get_current_version();
-    $verion=comapre_versions($version, '1.2');
-    if ($verion=="1")
+    if ($version!="1.2")
     {
-        $options=spr_options();
-        $list=spr_list_cpt_slugs();
-        foreach ($list as $list_)
+        $verion=comapre_versions($version, '1.2.1');
+        if ($verion=="1")
         {
-            $def_types[$list_]=0;
+            $options=spr_options();
+            $list=spr_list_cpt_slugs();
+            foreach ($list as $list_)
+            {
+                $def_types[$list_]=0;
+            }
+            $options['where_to_show']=$def_types;
+            $options['loop_on_hp']="0";
+            $options=json_encode($options);
+            update_option('spr_settings', $options);
+            update_option('spr_version', '1.2.1');
         }
-        $options['where_to_show']=$def_types;
-        $options=json_encode($options);
-        update_option('spr_settings', $options);
-        update_option('spr_version', '1.2');
-    }
-    else if ($verion=="0")
-    {
-        update_option('spr_version', '1.2');
-    }
-    else if ($verion=="-1")
-    {
-        //No need for upgrade
+        else if ($verion=="0")
+        {
+            update_option('spr_version', '1.2.1');
+        }
+        else if ($verion=="-1")
+        {
+            //No need for upgrade
+        }
     }
 }
 
