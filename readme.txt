@@ -66,7 +66,7 @@ Yes, they are.
 == Changelog ==
 
 = 1.2.1 =
-* Added ability to shop in the loop on home page
+* Added ability to show rating in the loop on the home page
 * Fixed bug with displaying in archives which could be experienced when using manual insertion
 
 = 1.2 =
