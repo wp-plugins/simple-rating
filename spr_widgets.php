@@ -7,7 +7,7 @@ class SPR_Top_Widget extends WP_Widget
     {
         parent::__construct(
                 'spr_top_widget', // 
-                __('Top Rated Content', 'text_domain'), array('description'=>__('This widget lists your top rated content', 'text_domain'),)
+                __('Top Rated Content', 'spr_text_domain'), array('description'=>__('This widget lists your top rated content', 'text_domain'),)
         );
     }
 
@@ -22,22 +22,29 @@ class SPR_Top_Widget extends WP_Widget
                 $intypes[]="'".$list_."'";
             }
         }
-        $intypes=implode(',', $intypes);
-        $count=$instance['count'];
-        $query="select `id`, `post_title` from `".$wpdb->prefix."posts` inner join `".$wpdb->prefix."spr_rating` on (`".$wpdb->prefix."posts`.`ID` =  `".$wpdb->prefix."spr_rating`.`post_id`) where `post_type` in ($intypes) order by `".$wpdb->prefix."spr_rating`.`points` DESC, `".$wpdb->prefix."posts`.`post_title` ASC limit $count;";
-        $popularity=$wpdb->get_results($query, ARRAY_A);
-        if (count($popularity)<1)
+        if (count($intypes)>0)
         {
-            $widget_body='There were no results fitting your criteria.';
+            $intypes=implode(',', $intypes);
+            $count=$instance['count'];
+            $query="select `id`, `post_title` from `".$wpdb->prefix."posts` inner join `".$wpdb->prefix."spr_rating` on (`".$wpdb->prefix."posts`.`ID` =  `".$wpdb->prefix."spr_rating`.`post_id`) where `post_type` in ($intypes) order by `".$wpdb->prefix."spr_rating`.`points` DESC, `".$wpdb->prefix."posts`.`post_title` ASC limit $count;";
+            $popularity=$wpdb->get_results($query, ARRAY_A);
+            if (count($popularity)<1)
+            {
+                $widget_body='There were no results fitting your criteria.';
+            }
+            else
+            {
+                $widget_body='<ul style="list-style-position:inside;list-style-type:'.$instance['list_style'].';">';
+                foreach ($popularity as $popularity_)
+                {
+                    $widget_body.='<li><a href="'.get_permalink($popularity_['id']).'" title="'.$popularity_['post_title'].'">'.$popularity_['post_title'].'</a></li>';
+                }
+                $widget_body.="<ul>";
+            }
         }
         else
         {
-            $widget_body='<ul style="list-style-position:inside;list-style-type:'.$instance['list_style'].';">';
-            foreach ($popularity as $popularity_)
-            {
-                $widget_body.='<li><a href="'.get_permalink($popularity_['id']).'" title="'.$popularity_['post_title'].'">'.$popularity_['post_title'].'</a></li>';
-            }
-            $widget_body.="<ul>";
+            $widget_body='There were no results fitting your criteria.';
         }
         $title=$args['before_title'].$instance['title'].$args['after_title'];
         echo $args['before_widget'].$title.$widget_body.$args['after_widget'];

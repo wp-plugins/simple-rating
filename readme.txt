@@ -3,7 +3,7 @@ Contributors: FlyerUA
 Tags: rating, wordpress
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.2.1
+Stable tag: 1.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -24,12 +24,17 @@ Simple rating plugin with few features.
 * Customize vote count style
 * Widget that lists your top rated content 
 * Works with custom posts types
+* Supports aggregated rating to show rating in search engine's snippets
+* Allow or disallow guests to vote
+* Rating statistics metabox
 
 == Screenshots ==
 
 1. Simple Rating settings
 2. Disable rating for specific post
-3. Simple Rating Top Rated Content widget
+3. Top Rated Content widget
+4. Example of Google Search snippet when Aggregated rating is enabled
+5. Rating statistics metabox which shows what votes were cast for current entry
 
 == Installation ==
 
@@ -53,7 +58,7 @@ Note: This only resets votes. Plugin will automatically fully remove its data up
 
 **If I don't want to add rating for specific post or page, can I disable it for that specific post or page?**
 
-You certainly can. Just tick the box "Disable rating" when editing post or page in question.
+You certainly can. Just tick the box "Disable rating" when editing/publishing post or page in question.
 
 **Can I leave 'Vote count color' empty?**
 
@@ -64,6 +69,15 @@ Yes, you can. In that case, color will be inherited.
 Yes, they are. 
 
 == Changelog ==
+
+= 1.3 =
+* Added Aggregated Rating (see 4th screenshot for example) functionality. Your rating can now be shown in search engines' snippets. 
+* Added notification when settings are successfully updated 
+* Added metabox which shows rating statistics
+* You can now allow guests to vote 
+* Added tooltips to make configuration easier and more understandable. Thanks to Chris Bracco for tooltips style.
+* Fixed bug in live preview
+* Fixed bug in widget
 
 = 1.2.1 =
 * Added ability to show rating in the loop on the home page

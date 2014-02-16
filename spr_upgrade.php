@@ -3,31 +3,14 @@
 function upgrade()
 {
     $version=get_current_version();
-    if ($version!="1.2")
+    $verion=comapre_versions($version, '1.3');
+    if ($verion=="1")
     {
-        $verion=comapre_versions($version, '1.2.1');
-        if ($verion=="1")
-        {
-            $options=spr_options();
-            $list=spr_list_cpt_slugs();
-            foreach ($list as $list_)
-            {
-                $def_types[$list_]=0;
-            }
-            $options['where_to_show']=$def_types;
-            $options['loop_on_hp']="0";
-            $options=json_encode($options);
-            update_option('spr_settings', $options);
-            update_option('spr_version', '1.2.1');
-        }
-        else if ($verion=="0")
-        {
-            update_option('spr_version', '1.2.1');
-        }
-        else if ($verion=="-1")
-        {
-            //No need for upgrade
-        }
+        update_option('spr_version', '1.3');
+        global $wpdb;
+        $query="ALTER TABLE `".$wpdb->prefix."spr_votes`
+        CHANGE COLUMN `user_id` `user_id` TINYTEXT NULL COLLATE 'utf8_unicode_ci' AFTER `post_id`;";
+        $wpdb->query($query);
     }
 }
 

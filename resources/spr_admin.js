@@ -1,31 +1,34 @@
 var $j = jQuery, pcl, number, type, space;
 type = spr_ajax_object.spr_type;
 scale = spr_ajax_object.scale;
-$j(".spr_rating_piece").mouseenter(function(event)
+function initiate()
 {
-    rating_wroking = spr_ajax_object.rating_working;
-    pcl = [];
-    numb = event.target.id;
-    numb = (parseInt(numb.replace('spr_piece_', '')));
-    for (var i = 1; i <= scale; i++) {
-        pcl[i] = ($j("#spr_piece_" + i).attr('class')).replace('spr_rating_piece ', '');
+    $j(".spr_rating_piece").mouseenter(function(event)
+    {
+        rating_wroking = spr_ajax_object.rating_working;
+        pcl = [];
+        numb = event.target.id;
+        numb = (parseInt(numb.replace('spr_piece_', '')));
+        for (var i = 1; i <= scale; i++) {
+            pcl[i] = ($j("#spr_piece_" + i).attr('class')).replace('spr_rating_piece ', '');
+        }
+        for (var i = 1; i <= scale; i++) {
+            $j("#spr_piece_" + i).addClass('spr_' + type + '_empty');
+        }
+        $j(".spr_rating_piece").removeClass('spr_' + type + '_full_voting');
+        $j(".spr_rating_piece").removeClass('spr_' + type + '_half_voting');
+        for (i = 1; i <= numb; i++) {
+            $j("#spr_piece_" + i).addClass('spr_' + type + '_full_voted');
+        }
+    }).mouseleave(function() {
+        $j(".spr_rating_piece").removeClass('spr_' + type + '_full_voted');
+        $j(".spr_rating_piece").removeClass('spr_' + type + '_half_voted');
+        for (var i = 1; i <= scale; i++) {
+            $j("#spr_piece_" + i).addClass(pcl[i]);
+        }
     }
-    for (var i = 1; i <= scale; i++) {
-        $j("#spr_piece_" + i).addClass('spr_' + type + '_empty');
-    }
-    $j(".spr_rating_piece").removeClass('spr_' + type + '_full_voting');
-    $j(".spr_rating_piece").removeClass('spr_' + type + '_half_voting');
-    for (i = 1; i <= numb; i++) {
-        $j("#spr_piece_" + i).addClass('spr_' + type + '_full_voted');
-    }
-}).mouseleave(function() {
-    $j(".spr_rating_piece").removeClass('spr_' + type + '_full_voted');
-    $j(".spr_rating_piece").removeClass('spr_' + type + '_half_voted');
-    for (var i = 1; i <= scale; i++) {
-        $j("#spr_piece_" + i).addClass(pcl[i]);
-    }
+    );
 }
-);
 
 $j("#spr_shape").change(function(event)
 {
@@ -62,15 +65,6 @@ $j("#spr_alignment").change(function(event)
 {
     $j("#spr_container").css('text-align', $j("#spr_alignment option:selected").val());
 })
-$j("#spr_method").change(function(event)
-{
-    if ($j("#spr_method").val() == 'manual') {
-        $j("#spr_method_hint").show();
-    }
-    else {
-        $j("#spr_method_hint").hide();
-    }
-})
 
 $j("#spr_scale").on('input', function(event)
 {
@@ -82,6 +76,7 @@ $j("#spr_scale").on('input', function(event)
             $j("#spr_shapes").html($j("#spr_shapes").html() + '<span id="spr_piece_' + i + '" class="spr_rating_piece spr_' + type + '_full_voting"></span>');
             $j("#spr_piece_" + i).addClass();
         }
+        initiate();
     }
     else {
         $j("#spr_shapes").html('');
@@ -89,6 +84,7 @@ $j("#spr_scale").on('input', function(event)
             $j("#spr_shapes").html($j("#spr_shapes").html() + '<span id="spr_piece_' + i + '" class="spr_rating_piece spr_' + type + '_full_voting"></span>');
             $j("#spr_piece_" + i).addClass();
         }
+        initiate();
     }
 })
 $j("#spr_vote_count_color").on('input', function(event)
@@ -146,6 +142,7 @@ $j("#spr_vc_bold").change(function(event)
 })
 
 jQuery(document).ready(function($) {
+    initiate();
     $j("#spr_votes").css('color', $j('#spr_vote_count_color').val());
     if ($j('#spr_vc_italic').is(":checked")) {
         $j("#spr_votes").css('font-style', 'italic');
@@ -160,7 +157,7 @@ jQuery(document).ready(function($) {
 
     $('.pickcolor').click(function(e) {
         colorPicker = $(this).next('div');
-        input = $(this).prev('input');
+        input = $("#spr_vote_count_color");
         clicked = $(this);
 
         $.farbtastic($(colorPicker), function(a) {
@@ -177,3 +174,4 @@ jQuery(document).ready(function($) {
         });
     });
 });
+
