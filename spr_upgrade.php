@@ -3,7 +3,7 @@
 function upgrade()
 {
     $version=get_current_version();
-    $verion=comapre_versions($version, '1.3.1');
+    $verion=comapre_versions($version, '1.3');
     if ($verion=="1")
     {
         update_option('spr_version', '1.3.1');
