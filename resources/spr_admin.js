@@ -144,6 +144,7 @@ $j("#spr_vc_bold").change(function(event)
 jQuery(document).ready(function($) {
     initiate();
     $j("#spr_votes").css('color', $j('#spr_vote_count_color').val());
+    $j("#spr_container").css('text-align', $j("#spr_alignment option:selected").val());
     if ($j('#spr_vc_italic').is(":checked")) {
         $j("#spr_votes").css('font-style', 'italic');
     }

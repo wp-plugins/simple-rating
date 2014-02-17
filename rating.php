@@ -3,7 +3,7 @@
 
   Plugin Name: Simple Rating
   Description: Allows users to rate posts and pages.
-  Version: 1.3
+  Version: 1.3.1
   Author: Igor Yavych
   Author URI: https://www.odesk.com/users/~~d196de64099a8aa3
  */
@@ -20,7 +20,7 @@ function spr_filter($content)
 {
     $options=spr_options();
     $list=spr_list_cpt_slugs();
-    global $post, $wpdb;
+    global $post, $wpdb,$spr_style;
     $disable_rating=get_post_meta($post->ID, '_spr_disable', true);
     foreach ($list as $list_)
     {
@@ -41,6 +41,11 @@ function spr_filter($content)
             if ($post->post_type==$list_&$options['where_to_show'][$list_]&&$disable_rating!='1')
             {
                 wp_enqueue_style('spr_style', plugins_url('/resources/spr_style.css', __FILE__));
+                if ($spr_style!=1)
+                    {
+                        spr_print_additional_styles();
+                        $spr_style=1;
+                    }
                 $query="select `votes`, `points` from `".$wpdb->prefix."spr_rating` where `post_id`='$post->ID';";
                 $popularity=$wpdb->get_results($query, ARRAY_N);
                 $votes=$popularity[0][0];
@@ -65,7 +70,7 @@ function spr_show_rating()
 {
     $options=spr_options();
     $list=spr_list_cpt_slugs();
-    global $post, $wpdb, $spr_added, $spr_added_loop;
+    global $post, $wpdb, $spr_added, $spr_added_loop, $spr_style;
     $disable_rating=get_post_meta($post->ID, '_spr_disable', true);
     $result="";
     if ($options['method']=="manual"&&$options['activated']==1)
@@ -83,6 +88,11 @@ function spr_show_rating()
                 if ($post->post_type==$list_&$options['where_to_show'][$list_]&&$disable_rating!='1'&&$spr_added_loop[$post->ID]!=1)
                 {
                     wp_enqueue_style('spr_style', plugins_url('/resources/spr_style.css', __FILE__));
+                    if ($spr_style!=1)
+                    {
+                        spr_print_additional_styles();
+                        $spr_style=1;
+                    }
                     $query="select `votes`, `points` from `".$wpdb->prefix."spr_rating` where `post_id`='$post->ID';";
                     $popularity=$wpdb->get_results($query, ARRAY_N);
                     $votes=$popularity[0][0];
@@ -491,6 +501,29 @@ function spr_save_settings()
                     }
             }
         }
+        //Alignment 
+        if (isset($_POST['spr_alignment']))
+        {
+            switch ($_POST['spr_alignment'])
+            {
+                case 'center' : {
+                        $options['alignment']='center';
+                        break;
+                    }
+                case 'left' : {
+                        $options['alignment']='left';
+                        break;
+                    }
+                case 'right' : {
+                        $options['alignment']='right';
+                        break;
+                    }
+                default: {
+                        $options['alignment']=$current_options['alignment'];
+                        break;
+                    }
+            }
+        }
         //Show vote count
         if (isset($_POST['spr_show_vote_count']))
         {
@@ -680,7 +713,7 @@ ENGINE=MyISAM;
     }
     $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0", "loop_on_hp"=>"0", "use_aggregated"=>"1", "allow_guest_vote"=>"0", "show_stats_metabox"=>"1");
     add_option('spr_settings', json_encode($default_options));
-    add_option('spr_version', '1.3');
+    add_option('spr_version', '1.3.1');
 }
 
 function add_spr_checkbox()
@@ -734,6 +767,7 @@ function spr_print_additional_styles()
     $options=spr_options();
     $style="<style>";
     $vc_style="#spr_votes{";
+    $c_style="#spr_container{";
     if (strlen($options['vote_count_color'])>0&&$options['show_vote_count'])
     {
         $vc_style.="color:".$options['vote_count_color']." !important;";
@@ -750,6 +784,15 @@ function spr_print_additional_styles()
     if ($vc_style!="#spr_votes{}")
     {
         $style.=$vc_style;
+    }
+    if ($options['alignment']=="right"||$options['alignment']=="left")
+    {
+        $c_style.="text-align:".$options['alignment']." !important;";
+    }
+    $c_style.="}";
+    if ($c_style!="#spr_container{}")
+    {
+        $style.=$c_style;
     }
     $style.="</style>";
     if ($style!="<style></style>")

@@ -3,7 +3,7 @@ Contributors: FlyerUA
 Tags: rating, wordpress
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -70,12 +70,16 @@ Yes, they are.
 
 == Changelog ==
 
+= 1.3.1 =
+* Fixed bug with alignment. It now works properly. Thanks to alkahf for reporting
+* Fixed bug with styling when displaying rating in loops
+
 = 1.3 =
-* Added Aggregated Rating (see 4th screenshot for example) functionality. Your rating can now be shown in search engines' snippets. 
+* Added Aggregated Rating (see 4th screenshot for example) functionality. Your rating can now be shown in search engines' snippets
 * Added notification when settings are successfully updated 
 * Added metabox which shows rating statistics
 * You can now allow guests to vote 
-* Added tooltips to make configuration easier and more understandable. Thanks to Chris Bracco for tooltips style.
+* Added tooltips to make configuration easier and more understandable. Thanks to Chris Bracco for tooltips style
 * Fixed bug in live preview
 * Fixed bug in widget
 

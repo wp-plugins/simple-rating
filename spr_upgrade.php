@@ -3,10 +3,10 @@
 function upgrade()
 {
     $version=get_current_version();
-    $verion=comapre_versions($version, '1.3');
+    $verion=comapre_versions($version, '1.3.1');
     if ($verion=="1")
     {
-        update_option('spr_version', '1.3');
+        update_option('spr_version', '1.3.1');
         global $wpdb;
         $query="ALTER TABLE `".$wpdb->prefix."spr_votes`
         CHANGE COLUMN `user_id` `user_id` TINYTEXT NULL COLLATE 'utf8_unicode_ci' AFTER `post_id`;";
