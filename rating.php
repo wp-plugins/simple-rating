@@ -943,4 +943,4 @@ add_action('admin_menu', 'spr_menu');
 add_action('wp_ajax_spr_rate', 'spr_rate');
 add_action('wp_ajax_nopriv_spr_rate', 'spr_rate');
 register_activation_hook(__FILE__, 'spr_activation_func');
-?> 
+?>
