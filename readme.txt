@@ -83,7 +83,7 @@ This function returns whole html block of rating
 
 = 1.3.2 =
 * Fixed 'NOTICE: UNDEFINED OFFSET' which occured when WP_DEBUG was set to true and entry had no votes yet.
-* Fixed notice about deprecated functions (since WordPress 3.6) which occured when WP_DEBUG when voting.
+* Fixed notice about deprecated functions (since WordPress 3.6) which occured when WP_DEBUG was set to true when voting.
 * Added function to pull rating of specific post for use in PHP (Refer to FAQ).
 * Clarified use of function when using manual insertion method in FAQ and tooltip in settings so that users don't encounter error when deactivating plugin and not removing function from whenever it's used. (though I recommend you to remove function from all files if you plan to deactivate and remove plugin)
 * Fixed bug in settings.
