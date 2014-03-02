@@ -36,16 +36,16 @@ wp_localize_script('spr_admin', 'spr_ajax_object', array('scale'=>$options['scal
                         <option value="manual" <?php selected($options['method'], 'manual', true); ?>>Manual</option>
                     </select>
                 </td>
-                <td class="spr_hint_container"><div class="spr_hint tooltip-right" data-tooltip="Automatic method is recommended if you don't want to touch theme files. It will use filter to insert rating before or after content. If you want to insert rating into a specific part of your template, set method to Manual and insert &#60;?php echo spr_show_rating();?&#62; where you need it."></div></td>
+                <td class="spr_hint_container"><div class="spr_hint tooltip-right" data-tooltip="Automatic method is recommended if you don't want to touch theme files. It will use filter to insert rating before or after content. If you want to insert rating into a specific part of your template, set method to Manual and insert &#60;?php if(function_exists('spr_show_rating')){echo spr_show_rating();}?&#62; where you need it."></div></td>
             </tr> 
             <tr>
                 <td  class="spr_adm_label"><label>Shape</label></td>
                 <td>
                     <select name="spr_shape" id="spr_shape" class="spr_admin_input">
-                        <option value="s" <?php selected($options['type'], 's', true); ?>>Stars</option>
-                        <option value="c" <?php selected($options['type'], 'c', true); ?>>Circles</option>
-                        <option value="h" <?php selected($options['type'], 'h', true); ?>>Hearts</option>
-                        <option value="b" <?php selected($options['type'], 'b', true); ?>>Bar</option>
+                        <option value="s" <?php selected($options['shape'], 's', true); ?>>Stars</option>
+                        <option value="c" <?php selected($options['shape'], 'c', true); ?>>Circles</option>
+                        <option value="h" <?php selected($options['shape'], 'h', true); ?>>Hearts</option>
+                        <option value="b" <?php selected($options['shape'], 'b', true); ?>>Bar</option>
                     </select>
                 </td>
             </tr>
@@ -140,7 +140,7 @@ wp_localize_script('spr_admin', 'spr_ajax_object', array('scale'=>$options['scal
             <span>Live preview</span>
         </h3>
         <div class="inside">         
-            <div id="spr_container"><div id="spr_visual_container"><?php echo spr_show_voting(5, 25, $options['show_vote_count']); ?></div></div>
+            <div id="spr_container"><div class="spr_visual_container"><?php echo spr_show_voting(5, 25, $options['show_vote_count']); ?></div></div>
         </div>
     </div>
     <div class="postbox ">
