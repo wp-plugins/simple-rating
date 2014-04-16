@@ -2,7 +2,7 @@
 Contributors: FlyerUA
 Tags: rating, wordpress
 Requires at least: 3.0
-Tested up to: 3.8.1
+Tested up to: 3.9
 Stable tag: 1.3.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
