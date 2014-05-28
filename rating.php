@@ -504,12 +504,19 @@ function spr_options()
         $def_types[$list_]=0;
     }
     $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0", "loop_on_hp"=>"0", "use_aggregated"=>"1", "allow_guest_vote"=>"0", "show_stats_metabox"=>"1");
-    $options=get_option('spr_settings');
-    $options=json_decode($options, true);
-    $diff=array_diff_key($default_options, $options);
-    if (count($diff)>0)
+    $options=get_option('spr_settings', 'undef');
+    if ($options!='undef')
     {
-        $options=array_merge($options, $diff);
+        $options=json_decode($options, true);
+        $diff=array_diff_key($default_options, $options);
+        if (count($diff)>0)
+        {
+            $options=array_merge($options, $diff);
+        }
+    }
+    else
+    {
+        $options=$default_options;
     }
     return $options;
 }
@@ -531,23 +538,28 @@ function spr_save_settings()
         {
             switch ($_POST['spr_shape'])
             {
-                case 'c' : {
+                case 'c' :
+                    {
                         $options['shape']='c';
                         break;
                     }
-                case 'h' : {
+                case 'h' :
+                    {
                         $options['shape']='h';
                         break;
                     }
-                case 'b' : {
+                case 'b' :
+                    {
                         $options['shape']='b';
                         break;
                     }
-                case 's' : {
+                case 's' :
+                    {
                         $options['shape']='s';
                         break;
                     }
-                default: {
+                default:
+                    {
                         $options['shape']=$current_options['shape'];
                         break;
                     }
@@ -558,27 +570,33 @@ function spr_save_settings()
         {
             switch ($_POST['spr_color'])
             {
-                case 'p' : {
+                case 'p' :
+                    {
                         $options['color']='p';
                         break;
                     }
-                case 'b' : {
+                case 'b' :
+                    {
                         $options['color']='b';
                         break;
                     }
-                case 'y' : {
+                case 'y' :
+                    {
                         $options['color']='y';
                         break;
                     }
-                case 'r' : {
+                case 'r' :
+                    {
                         $options['color']='r';
                         break;
                     }
-                case 'g' : {
+                case 'g' :
+                    {
                         $options['color']='g';
                         break;
                     }
-                default: {
+                default:
+                    {
                         $options['color']=$current_options['color'];
                         break;
                     }
@@ -589,15 +607,18 @@ function spr_save_settings()
         {
             switch ($_POST['spr_position'])
             {
-                case 'before' : {
+                case 'before' :
+                    {
                         $options['position']='before';
                         break;
                     }
-                case 'after' : {
+                case 'after' :
+                    {
                         $options['position']='after';
                         break;
                     }
-                default: {
+                default:
+                    {
                         $options['position']=$current_options['position'];
                         break;
                     }
@@ -608,19 +629,23 @@ function spr_save_settings()
         {
             switch ($_POST['spr_alignment'])
             {
-                case 'center' : {
+                case 'center' :
+                    {
                         $options['alignment']='center';
                         break;
                     }
-                case 'left' : {
+                case 'left' :
+                    {
                         $options['alignment']='left';
                         break;
                     }
-                case 'right' : {
+                case 'right' :
+                    {
                         $options['alignment']='right';
                         break;
                     }
-                default: {
+                default:
+                    {
                         $options['alignment']=$current_options['alignment'];
                         break;
                     }
@@ -661,15 +686,18 @@ function spr_save_settings()
         {
             switch ($_POST['spr_method'])
             {
-                case 'auto' : {
+                case 'auto' :
+                    {
                         $options['method']='auto';
                         break;
                     }
-                case 'manual' : {
+                case 'manual' :
+                    {
                         $options['method']='manual';
                         break;
                     }
-                default: {
+                default:
+                    {
                         $options['method']=$current_options['method'];
                         break;
                     }
