@@ -10,5 +10,5 @@ global $wpdb;
 $query="DROP TABLE IF EXISTS  `".$wpdb->prefix."spr_votes` , `".$wpdb->prefix."spr_rating`;";
 $wpdb->query($query);
 unlink(__FILE__);
-rmdir(__DIR__);
+@rmdir(__DIR__);
 ?>

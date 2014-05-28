@@ -21,7 +21,7 @@ function upgrade()
 
 function get_current_version()
 {
-    return get_option('spr_version', '0.0.1');
+    return get_option('spr_version', '1.3.2');
 }
 
 function comapre_versions($current, $new)
