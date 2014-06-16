@@ -6,22 +6,22 @@ function upgrade()
     $verion=comapre_versions($version, '1.3');
     if ($verion=="1")
     {
-        update_option('spr_version', '1.3.2');
+        update_option('spr_version', '1.3.3');
         global $wpdb;
         $query="ALTER TABLE `".$wpdb->prefix."spr_votes`
         CHANGE COLUMN `user_id` `user_id` TINYTEXT NULL COLLATE 'utf8_unicode_ci' AFTER `post_id`;";
         $wpdb->query($query);
     }
-    $verion=comapre_versions($version, '1.3.2');
+    $verion=comapre_versions($version, '1.3.3');
     if ($verion=="1")
     {
-        update_option('spr_version', '1.3.2');
+        update_option('spr_version', '1.3.3');
     }
 }
 
 function get_current_version()
 {
-    return get_option('spr_version', '1.3.2');
+    return get_option('spr_version', '1.3.3');
 }
 
 function comapre_versions($current, $new)

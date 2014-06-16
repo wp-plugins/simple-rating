@@ -2,7 +2,7 @@
 /*
   Plugin Name: Simple Rating
   Description: Allows users to rate posts and pages.
-  Version: 1.3.2
+  Version: 1.3.3
   Author: Igor Yavych
   Author URI: https://www.odesk.com/users/~~d196de64099a8aa3
  */
@@ -843,7 +843,7 @@ ENGINE=MyISAM;
     }
     $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0", "loop_on_hp"=>"0", "use_aggregated"=>"1", "allow_guest_vote"=>"0", "show_stats_metabox"=>"1");
     add_option('spr_settings', json_encode($default_options));
-    add_option('spr_version', '1.3.1');
+    add_option('spr_version', '1.3.3');
 }
 
 function add_spr_checkbox()

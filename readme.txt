@@ -3,7 +3,7 @@ Contributors: FlyerUA
 Tags: rating, wordpress
 Requires at least: 3.0
 Tested up to: 3.9
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -80,6 +80,9 @@ This function returns whole html block of rating
 `$echo (boolean) (optional) (default: false)` whether result should be echoed or returned for use in PHP
 
 == Changelog ==
+
+= 1.3.3 =
+* Solved conflict with WordPress SEO which prevented voting from working
 
 = 1.3.2 =
 * Fixed 'NOTICE: UNDEFINED OFFSET' which occured when WP_DEBUG was set to true and entry had no votes yet.
