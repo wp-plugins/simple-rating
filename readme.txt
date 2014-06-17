@@ -82,7 +82,7 @@ This function returns whole html block of rating
 == Changelog ==
 
 = 1.3.3 =
-* Solved conflict with WordPress SEO which prevented voting from working
+* Solved conflict with WordPress SEO (possibly other too) which prevented voting from working
 
 = 1.3.2 =
 * Fixed 'NOTICE: UNDEFINED OFFSET' which occured when WP_DEBUG was set to true and entry had no votes yet.
