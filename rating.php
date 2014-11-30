@@ -2,7 +2,7 @@
 /*
   Plugin Name: Simple Rating
   Description: Allows users to rate posts and pages.
-  Version: 1.3.3
+  Version: 1.4
   Author: Igor Yavych
   Author URI: https://www.odesk.com/users/~~d196de64099a8aa3
  */
@@ -10,6 +10,7 @@ require_once ("spr_widgets.php");
 require_once ("spr_upgrade.php");
 upgrade();
 $options=spr_options();
+spr_load_localization();
 if ($options['activated']==1&&$options['method']=="auto")
 {
     add_filter('the_content', 'spr_filter', 15);
@@ -164,7 +165,7 @@ function spr_get_entry_rating($post_id, $echo=false)
         }
         else
         {
-            echo "Invalid Post ID was supplied";
+            spr_localize('errors_invalid_post_id');
         }
     }
 }
@@ -282,15 +283,7 @@ function spr_show_voted($votes, $points, $show_vc)
     $html.='</div>';
     if ($show_vc)
     {
-        if ($votes==1)
-        {
-            $votesorvote='vote';
-        }
-        else
-        {
-            $votesorvote='votes';
-        }
-        $html .= '<span id="spr_votes">'.$votes.' '.$votesorvote.'</span>';
+        $html .= '<span id="spr_votes">'.$votes.' '.vote_counter_form($votes).'</span>';
     }
 
     return $html;
@@ -329,15 +322,7 @@ function spr_show_voting($votes, $points, $show_vc)
     $html.='</div>';
     if ($show_vc)
     {
-        if ($votes==1)
-        {
-            $votesorvote='vote';
-        }
-        else
-        {
-            $votesorvote='votes';
-        }
-        $html .= '<span id="spr_votes">'.$votes.' '.$votesorvote.'</span>';
+        $html .= '<span id="spr_votes">'.$votes.' '.vote_counter_form($votes).'</span>';
     }
     return $html;
 }
@@ -503,7 +488,7 @@ function spr_options()
     {
         $def_types[$list_]=0;
     }
-    $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0", "loop_on_hp"=>"0", "use_aggregated"=>"1", "allow_guest_vote"=>"0", "show_stats_metabox"=>"1");
+    $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0", "loop_on_hp"=>"0", "use_aggregated"=>"1", "allow_guest_vote"=>"0", "show_stats_metabox"=>"1", "localization"=>"en");
     $options=get_option('spr_settings', 'undef');
     if ($options!='undef')
     {
@@ -779,7 +764,19 @@ function spr_save_settings()
         {
             $options['show_stats_metabox']='0';
         }
-
+        //locale
+        if (isset($_POST['spr_locale']))
+        {
+            $locales=spr_scan_locales();
+            if (in_array($_POST['spr_locale'], $locales))
+            {
+                $options['localization']=$_POST['spr_locale'];
+            }
+            else
+            {
+                $options['localization']='en';
+            }
+        }
         //where to show
         $list=spr_list_cpt_slugs();
         foreach ($list as $list_)
@@ -794,7 +791,7 @@ function spr_save_settings()
                 $options['where_to_show'][$list_]='0';
             }
         }
-        $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0", "loop_on_hp"=>"0", "use_aggregated"=>"1", "allow_guest_vote"=>"0", "show_stats_metabox"=>"1");
+        $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0", "loop_on_hp"=>"0", "use_aggregated"=>"1", "allow_guest_vote"=>"0", "show_stats_metabox"=>"1", "localization"=>"en");
         $diff=array_diff_key($default_options, $options);
         if (count($diff)>0)
         {
@@ -805,7 +802,7 @@ function spr_save_settings()
         if ($current_json!=$options)
         {
             update_option('spr_settings', $options);
-            echo "<div class='updated'><p>Settings were updated successfully.</p></div>";
+            echo "<div class='updated'><p>".spr_localize('settings_settings_saved', false)."</p></div>";
         }
     }
 }
@@ -841,9 +838,9 @@ ENGINE=MyISAM;
     {
         $def_types[$list_]=0;
     }
-    $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0", "loop_on_hp"=>"0", "use_aggregated"=>"1", "allow_guest_vote"=>"0", "show_stats_metabox"=>"1");
+    $default_options=array("shape"=>"s", "color"=>"y", "where_to_show"=>$def_types, "position"=>"before", "show_vote_count"=>"1", "activated"=>"0", "scale"=>"5", "method"=>"auto", "alignment"=>"center", "vote_count_color"=>"", "vc_bold"=>"0", "vc_italic"=>"0", "show_in_loops"=>"0", "loop_on_hp"=>"0", "use_aggregated"=>"1", "allow_guest_vote"=>"0", "show_stats_metabox"=>"1", "localization"=>"en");
     add_option('spr_settings', json_encode($default_options));
-    add_option('spr_version', '1.3.3');
+    add_option('spr_version', '1.4');
 }
 
 function add_spr_checkbox()
@@ -854,7 +851,7 @@ function add_spr_checkbox()
     ?>
     <div class="misc-pub-section">
         <input id="spr_disable_rating" type="checkbox" name="spr_disable_rating"  value="<?php echo $disable_rating; ?>" <?php checked($disable_rating, 1, true); ?>>
-        <label for="spr_enable_rating">Disable rating for this entry</label></div>
+        <label for="spr_enable_rating"><?php spr_localize('widgets_disable_rating'); ?></label></div>
     <?php
 }
 
@@ -1019,26 +1016,18 @@ function spr_list_ratings($post)
             }
             if ($found)
             {
-                if ($votes==1)
-                {
-                    $votesorvote='vote';
-                }
-                else
-                {
-                    $votesorvote='votes';
-                }
-                $html.='<div id="spr_visual_container_adm">'.spr_show_voted(1, $i, false).'<span id="spr_votes">'.$votes." ".$votesorvote."</span></div><br/>";
+                $html.='<div id="spr_visual_container_adm">'.spr_show_voted(1, $i, false).'<span id="spr_votes">'.$votes." ".vote_counter_form($votes)."</span></div><br/>";
             }
             else
             {
-                $html.='<div id="spr_visual_container_adm">'.spr_show_voted(1, $i, false)."<span id='spr_votes'>0 votes</span></div><br/>";
+                $html.='<div id="spr_visual_container_adm">'.spr_show_voted(1, $i, false)."<span id='spr_votes'>0 ".vote_counter_form(0)."</span></div><br/>"; // vote form here
             }
         }
-        $result='<div id="spr_visual_container_adm">'.spr_show_voted($totalvotes, $totalpoints, true)."</div><div style='text-align:center;font-size:15px;margin:3px;font-weight:700;'>Statistics by rating:</div>";
+        $result='<div id="spr_visual_container_adm">'.spr_show_voted($totalvotes, $totalpoints, true)."</div><div style='text-align:center;font-size:15px;margin:3px;font-weight:700;'>".spr_localize('widgets_statistics_metabox_stats_by_rating', false).":</div>";
     }
     else
     {
-        $html.="There are no votes for this entry yet.";
+        $html.=spr_localize('widgets_statistics_metabox_no_votes', false);
     }
     echo $result.$html;
 }
@@ -1059,10 +1048,134 @@ function spr_add_custom_box()
         {
             foreach ($screens as $screen)
             {
-                add_meta_box('spr_rating_stats', __('Rating statistics', 'spr_text_domain'), 'spr_list_ratings', $screen, 'side');
+                add_meta_box('spr_rating_stats', spr_localize('widgets_statistics_metabox_title', false), 'spr_list_ratings', $screen, 'side');
             }
         }
     }
+}
+
+function spr_load_localization()
+{
+    $options=spr_options();
+    global $spr_localization_loaded, $spr_localization;
+    $spr_localization_loaded=false;
+    if (file_exists(plugin_dir_path(__FILE__).'locales/'.$options["localization"]))
+    {
+        include(plugin_dir_path(__FILE__).'locales/'.$options["localization"]);
+        if (isset($spr_localization))
+        {
+            $spr_localization_loaded=true;
+        }
+    }
+}
+
+function spr_localize($string_key, $echo=true)
+{
+    global $spr_localization_loaded, $spr_localization;
+    $default_locale='{"vote_counter_singular":"vote","vote_counter_plural":"votes","vote_counter_special_case1":"votes","vote_counter_special_case2":"votes","widgets_top_rated_admin_title":"Top Rated Content","widgets_top_rated_description":"This widget lists your top rated content","widgets_top_rated_no_results":"There were no results fitting your criteria.","widgets_top_rated_settings_title":"Title","widgets_top_rated_settings_what_to_include":"What to include","widgets_top_rated_settings_list_style":"List style","widgets_top_rated_settings_list_style_none":"None","widgets_top_rated_settings_list_style_circle":"Circle","widgets_top_rated_settings_list_style_disc":"Disc","widgets_top_rated_settings_list_style_square":"Square","widgets_top_rated_settings_list_style_decimal":"Decimal","widgets_top_rated_settings_list_style_decimal_leading_zero":"Decimal with leading zero","widgets_top_rated_settings_list_style_lower_alpha":"Lower letters","widgets_top_rated_settings_list_style_upper_alpha":"Upper letters","widgets_top_rated_settings_list_style_lower_roman":"Lower Roman","widgets_top_rated_settings_list_style_upper_roman":"Upper Roman","widgets_top_rated_settings_items_count":"Count of items","widgets_statistics_metabox_title":"Rating statistics","widgets_statistics_metabox_stats_by_rating":"Statistics by rating","widgets_statistics_metabox_no_votes":"There are no votes for this entry yet","widgets_disable_rating":"Disable rating for this entry","settings_header":"Adjust settings of the Simple Rating","settings_option_show_rating":"Show rating","settings_option_show_rating_tip":"Unless you check this box, rating won\'t show up.","settings_option_allow_guest_votes":"Allow guests to vote","settings_option_allow_guest_votes_tip":"If you check this box, guests will be allowed to vote. Guest votes will be tracked by IP instead of UserID","settings_option_insertion_method":"Insertion method","settings_option_insertion_method_automatic":"Automatic","settings_option_insertion_method_manual":"Manual","settings_option_insertion_method_tip":"Automatic method is recommended if you don\'t want to touch theme files. It will use filter to insert rating before or after content. If you want to insert rating into a specific part of your template, set method to Manual and insert &#60;?php if(function_exists(\'spr_show_rating\')){echo spr_show_rating();}?&#62; where you need it.","settings_option_shape":"Shape","settings_option_shape_stars":"Stars","settings_option_shape_circles":"Circles","settings_option_shape_hearts":"Hearts","settings_option_shape_bar":"Bar","settings_option_color":"Color","settings_option_color_yellow":"Yellow","settings_option_color_purple":"Purple","settings_option_color_green":"Green","settings_option_color_blue":"Blue","settings_option_color_red":"Red","settings_option_alignment":"Alignment","settings_option_alignment_center":"Center","settings_option_alignment_right":"Right","settings_option_alignment_left":"Left","settings_option_show_vote_count":"Show vote count","settings_option_vote_count_color":"Vote count color","settings_option_vote_count_style":"Vote count style","settings_option_vote_count_style_bold":"Bold","settings_option_vote_count_style_italic":"Italic","settings_option_scale":"Scale","settings_option_scale_tip":"Scale of rating. Allowed values: 3-10.","settings_option_where_to_add":"Where to add rating","settings_option_position":"Position","settings_option_position_before":"Before content","settings_option_position_after":"After content","settings_option_show_in_loops":"Show in loops","settings_option_show_in_loops_tip":"Check this box if you want to show rating in the loops. Category page for example. Note: voting is allowed only from a single page.","settings_option_show_in_loops_hompage":"Show in loop on home page","settings_option_show_in_loops_hompage_tip":"If your homepage uses loop and you want to show rating there, check this box.","settings_option_aggregated":"Use aggregated rating","settings_option_aggregated_tip":"If you check this box, rating will be shown in search engines\' snippets. See Screenshot 4 for example. Note: this plugin can\'t control rating style in snippets.","settings_option_statistics_metabox":"Show statistics metabox","settings_option_statistic_metabox_tip":"If you check this box, you will see metabox with rating statistics when editing posts\/pages\/custom post type entries.","settings_save_button":"Save settings","settings_widgets_live_preview_title":"Live preview","settings_widgets_donate_title":"Donate","settings_widgets_donate_button":"Donate via Skrill","settings_widgets_reset_votes_title":"Reset votes","settings_widgets_reset_votes_confirmation":"Do you really want to reset votes?","settings_widgets_reset_votes_description":"You can reset votes by pressing button below.","settings_widgets_reset_votes_button":"Reset votes","settings_widgets_feedback_title":"Feedback","settings_widgets_feedback_description":"Found a bug? Or maybe have a feature request? Head over to \u003Ca href=\"http:\/\/wordpress.org\/support\/plugin\/simple-rating\"\u003Esupport forum\u003C\/a\u003E and let me know!","settings_settings_saved":"Settings were updated successfully.","settings_option_locale":"Locale","errors_invalid_post_id":"Invalid Post ID was supplied"}';
+    $default_locale=json_decode($default_locale, true);
+    if ($spr_localization_loaded)
+    {
+        if (isset($spr_localization[$string_key]))
+        {
+            if ($echo)
+            {
+                $return_string=$spr_localization[$string_key];
+            }
+            else
+            {
+                $return_string=$spr_localization[$string_key];
+            }
+        }
+        else
+        {
+            if ($echo)
+            {
+                $return_string=$default_locale[$string_key];
+            }
+            else
+            {
+                $return_string=$default_locale[$string_key];
+            }
+        }
+    }
+    else
+    {
+        if ($echo)
+        {
+            $return_string=$default_locale[$string_key];
+        }
+        else
+        {
+            $return_string=$default_locale[$string_key];
+        }
+    }
+    if ($echo)
+    {
+        echo $return_string;
+    }
+    else
+    {
+        return $return_string;
+    }
+}
+
+function vote_counter_form($votes, $echo=false)
+{
+    if ($votes==1)
+    {
+        $return_string=spr_localize('vote_counter_singular', false);
+    }
+    else if (preg_match("#[^1]?[2-4]{1,1}$#", $votes))
+    {
+        $return_string=spr_localize('vote_counter_special_case1', false);
+    }
+    else if (preg_match("#[^1]1{1,1}$#", $votes))
+    {
+        $return_string=spr_localize('vote_counter_special_case2', false);
+    }
+    else
+    {
+        $return_string=spr_localize('vote_counter_plural', false);
+    }
+    if ($echo)
+    {
+        echo $return_string;
+    }
+    else
+    {
+        return $return_string;
+    }
+}
+
+function spr_scan_locales($extensive=false)
+{
+    $path=plugin_dir_path(__FILE__).'locales';
+    $scandir=array_diff(scandir($path), array('.', '..'));
+    if ($extensive)
+    {
+        foreach ($scandir as $item)
+        {
+            if (is_file($path.'/'.$item))
+            {
+                include($path.'/'.$item);
+                $locales[]=array("code"=>$item, "language"=>$spr_locale_language);
+                unset($spr_locale_language);
+                unset($spr_localization);
+            }
+        }
+    }
+    else
+    {
+        foreach ($scandir as $item)
+        {
+            if (is_file($path.'/'.$item))
+            {
+                $locales[]=$item;
+            }
+        }
+    }
+    return $locales;
 }
 
 add_action('add_meta_boxes', 'spr_add_custom_box');

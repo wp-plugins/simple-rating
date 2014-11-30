@@ -6,10 +6,10 @@
 #spr_visual_container_adm{height:17px;line-height:17px;display:inline-block;margin:0;padding:0;margin-bottom:2px;}
 #spr_method_hint{display:none;margin-left:5px;}
 #spr_shapes{display:inline;}
-.spr_admin_input{width:140px;}
-.spr_cb_labels{width:120px;}
+.spr_admin_input{width:160px;}
+.spr_cb_labels{width:138px;}
 .spr_hidden{display:none;}
-.spr_adm_label{width:150px;}
+.spr_adm_label{width:180px;}
 .spr_bs_empty{background:url(blue_stars.png) -17px 0;background-repeat: no-repeat;}
 .spr_bs_full_voted{background:url(blue_stars.png) -17px -17px;background-repeat: no-repeat;}
 .spr_bs_half_voted{background:url(blue_stars.png) 0 0;background-repeat: no-repeat;}

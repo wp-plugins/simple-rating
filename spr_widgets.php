@@ -7,7 +7,7 @@ class SPR_Top_Widget extends WP_Widget
     {
         parent::__construct(
                 'spr_top_widget', // 
-                __('Top Rated Content', 'spr_text_domain'), array('description'=>__('This widget lists your top rated content', 'text_domain'),)
+                spr_localize('widgets_top_rated_admin_title', false), array('description'=>spr_localize('widgets_top_rated_description', false))
         );
     }
 
@@ -30,7 +30,7 @@ class SPR_Top_Widget extends WP_Widget
             $popularity=$wpdb->get_results($query, ARRAY_A);
             if (count($popularity)<1)
             {
-                $widget_body='There were no results fitting your criteria.';
+                $widget_body=spr_localize('widgets_top_rated_no_results', false);
             }
             else
             {
@@ -44,7 +44,7 @@ class SPR_Top_Widget extends WP_Widget
         }
         else
         {
-            $widget_body='There were no results fitting your criteria.';
+            $widget_body=spr_localize('widgets_top_rated_no_results', false);
         }
         $title=$args['before_title'].$instance['title'].$args['after_title'];
         echo $args['before_widget'].$title.$widget_body.$args['after_widget'];
@@ -53,21 +53,21 @@ class SPR_Top_Widget extends WP_Widget
     public function form($instance)
     {
         $count=(!empty($instance['count'])) ? $instance['count'] : "5";
-        echo '<p><label style="font-weight: 700;">Title:</label><input type="text" style="float:right;" maxlength="200" name="'.$this->get_field_name('title').'" id="'.$this->get_field_id('title').'" value="'.$instance['title'].'"></p>
-        <p><label style="font-weight: 700;">What to include:</label>'.$this->spr_cpt_widgets($instance).'</p><p><label style="font-weight: 700;">List style:</label>
+        echo '<p><label style="font-weight: 700;">'.spr_localize('widgets_top_rated_settings_title', false).':</label><input type="text" style="float:right;" maxlength="200" name="'.$this->get_field_name('title').'" id="'.$this->get_field_id('title').'" value="'.$instance['title'].'"></p>
+        <p><label style="font-weight: 700;">'.spr_localize('widgets_top_rated_settings_what_to_include', false).':</label>'.$this->spr_cpt_widgets($instance).'</p><p><label style="font-weight: 700;">'.spr_localize('widgets_top_rated_settings_list_style', false).':</label>
         <select style="float:right;" name="'.$this->get_field_name('list_style').'" id="'.$this->get_field_id('list_style').'">
-        <option value="none" '.selected($instance['list_style'], 'none', false).'>None</option>                        
-        <option value="circle" '.selected($instance['list_style'], 'circle', false).'>Circle</option>
-        <option value="disc" '.selected($instance['list_style'], 'disc', false).'>Disc</option>
-        <option value="square" '.selected($instance['list_style'], 'square', false).'>Square</option>
-        <option value="Decimal" '.selected($instance['list_style'], 'decimal', false).'>Decimal</option>
-        <option value="decimal-leading-zero" '.selected($instance['list_style'], 'decimal-leading-zero', false).'>Decimal with leading zero</option>
-        <option value="lower-alpha" '.selected($instance['list_style'], 'lower-alpha', false).'>Lower letters</option>
-        <option value="upper-alpha" '.selected($instance['list_style'], 'upper-alpha', false).'>Upper letters</option>
-        <option value="lower-roman" '.selected($instance['list_style'], 'lower-roman', false).'>Lower Roman</option>
-        <option value="upper-roman" '.selected($instance['list_style'], 'upper-roman', false).'>Upper Roman</option>                                                   
+        <option value="none" '.selected($instance['list_style'], 'none', false).'>'.spr_localize('widgets_top_rated_settings_list_style_none', false).'</option>                        
+        <option value="circle" '.selected($instance['list_style'], 'circle', false).'>'.spr_localize('widgets_top_rated_settings_list_style_circle', false).'</option>
+        <option value="disc" '.selected($instance['list_style'], 'disc', false).'>'.spr_localize('widgets_top_rated_settings_list_style_disc', false).'</option>
+        <option value="square" '.selected($instance['list_style'], 'square', false).'>'.spr_localize('widgets_top_rated_settings_list_style_square', false).'</option>
+        <option value="decimal" '.selected($instance['list_style'], 'decimal', false).'>'.spr_localize('widgets_top_rated_settings_list_style_decimal', false).'</option>
+        <option value="decimal-leading-zero" '.selected($instance['list_style'], 'decimal-leading-zero', false).'>'.spr_localize('widgets_top_rated_settings_list_style_decimal_leading_zero', false).'</option>
+        <option value="lower-alpha" '.selected($instance['list_style'], 'lower-alpha', false).'>'.spr_localize('widgets_top_rated_settings_list_style_lower_alpha', false).'</option>
+        <option value="upper-alpha" '.selected($instance['list_style'], 'upper-alpha', false).'>'.spr_localize('widgets_top_rated_settings_list_style_upper_alpha', false).'</option>
+        <option value="lower-roman" '.selected($instance['list_style'], 'lower-roman', false).'>'.spr_localize('widgets_top_rated_settings_list_style_lower_roman', false).'</option>
+        <option value="upper-roman" '.selected($instance['list_style'], 'upper-roman', false).'>'.spr_localize('widgets_top_rated_settings_list_style_upper_roman', false).'</option>                                                   
         </select></p>
-        <p><label style="font-weight: 700;">Count of items:</label><input type="text" size="10" style="float:right;" maxlength="200" name="'.$this->get_field_name('count').'" id="'.$this->get_field_id('count').'" value="'.$count.'"></p>';
+        <p><label style="font-weight: 700;">'.spr_localize('widgets_top_rated_settings_items_count', false).':</label><input type="text" size="10" style="float:right;" maxlength="200" name="'.$this->get_field_name('count').'" id="'.$this->get_field_id('count').'" value="'.$count.'"></p>';
     }
 
     public function update($new_instance, $old_instance)

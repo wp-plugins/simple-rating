@@ -2,8 +2,8 @@
 Contributors: FlyerUA
 Tags: rating, wordpress
 Requires at least: 3.0
-Tested up to: 4.0
-Stable tag: 1.3.3
+Tested up to: 4.0.1
+Stable tag: 1.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -79,7 +79,18 @@ This function returns whole html block of rating
 `$post_id (integer) (required)` ID of post, page or custom post type entry 
 `$echo (boolean) (optional) (default: false)` whether result should be echoed or returned for use in PHP
 
+**Can I easily translate it to my language?**
+
+Yes, you certainly can. Please read how_to_translate.txt for localization instructions.
+
+**I broke my site while trying to create my own localization. What should I do?**
+
+First of all, you should have read how_to_translate.txt more carefully. Actually, go read it now. It explains what to do in this situation (at the end of file)
+.
 == Changelog ==
+
+= 1.4 =
+* Added ability to easily translate plugin to your language. Please read how_to_translate.txt for localization instructions. At this time English, Ukrainian and Russian languages are available (just because I don't know any other languages)
 
 = 1.3.3 =
 * Solved conflict with WordPress SEO (possibly other too) which prevented voting from working
