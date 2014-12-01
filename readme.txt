@@ -92,6 +92,8 @@ First of all, you should have read how_to_translate.txt more carefully. Actually
 = 1.4 =
 * Added ability to easily translate plugin to your language. Please read how_to_translate.txt for localization instructions. At this time English, Ukrainian and Russian languages are available (just because I don't know any other languages)
 
+Currently looking for suggestions on how to make this plugin better. Head over to https://wordpress.org/support/plugin/simple-rating and let me know if you got any ideas. 
+
 = 1.3.3 =
 * Solved conflict with WordPress SEO (possibly other too) which prevented voting from working
 
