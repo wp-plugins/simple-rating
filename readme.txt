@@ -2,7 +2,7 @@
 Contributors: FlyerUA
 Tags: rating, wordpress
 Requires at least: 3.0
-Tested up to: 4.0.1
+Tested up to: 4.1
 Stable tag: 1.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
@@ -27,6 +27,7 @@ Simple rating plugin with few features.
 * Supports aggregated rating to show rating in search engine's snippets
 * Allow or disallow guests to vote
 * Rating statistics metabox
+* Few languages available with an ability to easily add your own
 
 == Screenshots ==
 
@@ -79,6 +80,13 @@ This function returns whole html block of rating
 `$post_id (integer) (required)` ID of post, page or custom post type entry 
 `$echo (boolean) (optional) (default: false)` whether result should be echoed or returned for use in PHP
 
+**Are there localizations available?**
+
+Yes, currently, next languages are available:
+* English
+* Ukrainian
+* Russian
+
 **Can I easily translate it to my language?**
 
 Yes, you certainly can. Please read how_to_translate.txt for localization instructions.
@@ -88,7 +96,6 @@ Yes, you certainly can. Please read how_to_translate.txt for localization instru
 First of all, you should have read how_to_translate.txt more carefully. Actually, go read it now. It explains what to do in this situation (at the end of file)
 .
 == Changelog ==
-
 = 1.4 =
 * Added ability to easily translate plugin to your language. Please read how_to_translate.txt for localization instructions. At this time English, Ukrainian and Russian languages are available (just because I don't know any other languages)
 
