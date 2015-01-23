@@ -39,7 +39,7 @@ class SPR_Top_Widget extends WP_Widget
                 {
                     $widget_body.='<li><a href="'.get_permalink($popularity_['id']).'" title="'.$popularity_['post_title'].'">'.$popularity_['post_title'].'</a></li>';
                 }
-                $widget_body.="<ul>";
+                $widget_body.="</ul>";
             }
         }
         else
