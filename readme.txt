@@ -27,7 +27,7 @@ Simple rating plugin with few features.
 * Supports aggregated rating to show rating in search engine's snippets
 * Allow or disallow guests to vote
 * Rating statistics metabox
-* Few languages available with an ability to easily add your own
+* Few languages available with an ability to easily add your own 
 
 == Screenshots ==
 
