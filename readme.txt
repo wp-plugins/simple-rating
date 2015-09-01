@@ -1,8 +1,8 @@
 === Simple Rating ===
 Contributors: FlyerUA
-Tags: rating, wordpress
+Tags: rating, vote, ratings, custom post type, votes, star rating, star ratings, post rating
 Requires at least: 3.0
-Tested up to: 4.1
+Tested up to: 4.3
 Stable tag: 1.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
@@ -10,6 +10,8 @@ License URI: http://www.gnu.org/licenses/gpl.html
 Allows users to rate your content.
 
 == Description ==
+
+Major version 1.5 is currently in the works. If you'd like to see a certain feature in this release, please [create a thread](https://wordpress.org/support/plugin/simple-rating) and tell me about your idea.
 
 Simple rating plugin with few features.
 
@@ -27,6 +29,7 @@ Simple rating plugin with few features.
 * Supports aggregated rating to show rating in search engine's snippets
 * Allow or disallow guests to vote
 * Rating statistics metabox
+* Few languages available with an ability to easily add your own 
 
 == Screenshots ==
 
@@ -79,16 +82,22 @@ This function returns whole html block of rating
 `$post_id (integer) (required)` ID of post, page or custom post type entry 
 `$echo (boolean) (optional) (default: false)` whether result should be echoed or returned for use in PHP
 
+**Are there localizations available?**
+
+Yes, currently, next languages are available:
+* English
+* Ukrainian
+* Russian
+
 **Can I easily translate it to my language?**
 
 Yes, you certainly can. Please read how_to_translate.txt for localization instructions.
 
 **I broke my site while trying to create my own localization. What should I do?**
 
-First of all, you should have read how_to_translate.txt more carefully. Actually, go read it now. It explains what to do in this situation (at the end of file)
-.
-== Changelog ==
+First of all, you should have read how_to_translate.txt more carefully. Actually, go read it now. It explains what to do in this situation (at the end of file).
 
+== Changelog ==
 = 1.4 =
 * Added ability to easily translate plugin to your language. Please read how_to_translate.txt for localization instructions. At this time English, Ukrainian and Russian languages are available (just because I don't know any other languages)
 
