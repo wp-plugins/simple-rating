@@ -15,7 +15,7 @@ Major version 1.5 is currently in the works. If you'd like to see a certain feat
 
 Simple rating plugin with few features.
 
-= Features: =
+= Features: = 
 * 4 shapes which come in 5 colors to fit wide variety of themes
 * Adjust scale of rating
 * Turn on/off display of amount of votes
